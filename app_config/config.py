@@ -3,6 +3,8 @@ from pymongo import MongoClient
 from dotenv import load_dotenv
 from adapter.mongo_subscription_adapter import SubscriptionMongoGateway
 from adapter.mongo_customer_adapter import CustomerMongoGateway
+from adapter.stripe_customer_adapter import CustomerStripGateway
+
 import stripe
 
 
@@ -29,12 +31,12 @@ class Config():
         
         customer_collection = client.get_database('billing').get_collection('customers')
         
-        return SubscriptionMongoGateway(customer_collection)
+        return CustomerMongoGateway(customer_collection)
     
     def getStripeCustomerGateway(self):
         stripe.api_key = self.get_by_path('STRIPE_SECRET_KEY');
         
-        return CustomerMongoGateway(stripe.Customer)
+        return CustomerStripGateway(stripe.Customer)
 
 
 appConfig = Config()

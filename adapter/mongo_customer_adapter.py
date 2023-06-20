@@ -1,19 +1,12 @@
-from ports.customer_port import CustomerPort
+from ports.customer_stripe_port import CustomerStripePort
 
-class CustomerMongoGateway(CustomerPort):
-    def __init__(self, stripCustomer):
-        self.stripCustomer = stripCustomer
+class CustomerMongoGateway(CustomerStripePort):
+    def __init__(self, mongoCustomer):
+        self.mongoCustomerCollection = mongoCustomer
         
-    def store(self, email, source):
-        customer = self.stripCustomer.create()
-        
-        cust_id =  customer.get('id')
-        
-        self.stripCustomer.modify(
-            cust_id,
-            email = email
-        )
-        
+    def store(self, customerId):
+        self.mongoCustomerCollection.insert_one({'customerId': customerId});
+
         
     
     
