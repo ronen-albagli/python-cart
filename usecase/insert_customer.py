@@ -9,7 +9,7 @@ CustomerMongoPort = Type[CustomerMongoPort]  # Replace with the actual type for 
 # Declare the dictionary
 UseCaseConfig = {
     'stripeCustomer': CustomerStripePort,
-    'mongoCustomer': CustomerMongoPort
+    'mongoCustomer': CustomerMongoPort,
 }
 
 class Create_customer_use_case():
@@ -28,3 +28,5 @@ class Create_customer_use_case():
         
         
         self.config['mongoCustomer'].store(cust_id)
+                        
+        return

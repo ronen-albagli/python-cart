@@ -11,12 +11,14 @@ def register_customer_routes(app: Flask, router_blueprint):
         
         stripeGateway = config.getStripeCustomerGateway()
         mongoCustomerGateway = config.getMongoCustomerGateway()
+        awsGateway = config.getAwsS3LocalGateway()
         
         data = request.json
         
         usecase = Create_customer_use_case({
                'stripeCustomer': stripeGateway,
-                'mongoCustomer': mongoCustomerGateway
+                'mongoCustomer': mongoCustomerGateway,
+                'awsGateway': awsGateway
             })
         
         output = usecase.execute(data)

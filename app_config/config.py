@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from adapter.mongo_subscription_adapter import SubscriptionMongoGateway
 from adapter.mongo_customer_adapter import CustomerMongoGateway
 from adapter.stripe_customer_adapter import CustomerStripGateway
-
+from adapter.aws_localstack_adapter import AWSS3LocalStackGateway
 import stripe
 
 
@@ -37,6 +37,9 @@ class Config():
         stripe.api_key = self.get_by_path('STRIPE_SECRET_KEY');
         
         return CustomerStripGateway(stripe.Customer)
+    
+    def getAwsS3LocalGateway(self):
+        return AWSS3LocalStackGateway()
 
 
 appConfig = Config()
