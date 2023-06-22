@@ -19,12 +19,26 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-# dckr_pat_ba0SisatNDtgxsYKcksStAp64qI
-      # - name: Install dependencies
-      #   run: |
-      #     python -m venv venv
-      #     source venv/bin/activate || echo "Virtual environment activation failed"
-      #     pip install -r requirements.txt
+
+      - name: Install Docker
+        run: |
+          sudo apt-get update
+          sudo apt-get install docker.io -y
+
+      - name: Pull Docker image
+        run: |
+          sudo docker pull ronenlabagli/python-billing:latest
+
+            - name: Run Docker container
+        run: |
+          sudo docker run -d -p 80:80 --name python-billing ronenlabagli/python-billing:latest
+
+      - name: Deploy application to EC2
+        run: |
+          echo "ENV_VARIABLE=${{ secrets.ENV_VARIABLE }}" >> .env
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ssh_key.pem
+          chmod 400 ssh_key.pem
+          ssh -o "StrictHostKeyChecking=no" -i  ssh_key.pem ec2-user@ec2-3-84-95-162.compute-1.amazonaws.com "sudo docker stop python-billing && sudo docker rm python-billing && sudo docker run -d -p 80:80 --name python-billing ronenlabagli/python-billing:latest"
 
       # - name: Deploy application to EC2
       #   run: |
@@ -33,9 +47,3 @@ jobs:
       #     chmod 400 ssh_key.pem
       #     ssh -o "StrictHostKeyChecking=no" -i ssh_key.pem ec2-user@ec2-3-84-95-162.compute-1.amazonaws.com "cd ./python-cart && git pull origin main && source venv/bin/activate && pip install -r requirements.txt"
 
-
-      - name: Build Docker image
-        run: docker build -t python-billing .   
-
-      - name: Run Docker container
-        run:  docker run -d python-billing  
