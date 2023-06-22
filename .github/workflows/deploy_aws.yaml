@@ -22,14 +22,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python -m venv venv
+          python3 -m venv venv
           source venv/bin/activate
           pip install -r requirements.txt
 
       - name: Deploy application to EC2
         run: |
-          python -m venv venv
-          source venv/bin/activate
           echo "ENV_VARIABLE=${{ secrets.ENV_VARIABLE }}" >> .env
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ssh_key.pem
           chmod 400 ssh_key.pem
