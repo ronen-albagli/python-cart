@@ -23,6 +23,5 @@ jobs:
           dockerfile: Dockerfile
           push: true
           tags: ronenlabagli/python-billing:latest
-          registry: docker.io
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
