@@ -17,7 +17,7 @@ class Config():
         load_dotenv()
     
     def get_by_path(self, path): 
-        return os.getenv(path)
+        return os.environ.get(path)
     
     def getMongoClient(self): 
         #  return MongoClient(self.get_by_path('MONGO_HOST'), int(self.get_by_path('MONGO_PORT')))
