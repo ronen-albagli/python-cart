@@ -9,7 +9,7 @@ class SubscriptionStripeGateway(SubscriptionPort):
             customer=customer_id,
             items=[{
                 'price': price_id
-            }]
+            }],
         )
         
         

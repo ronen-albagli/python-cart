@@ -20,7 +20,7 @@ def register_subscription_routes(app: Flask, router_blueprint):
             'mongoSubscription': mongoGateway
         }) 
         
-        usecase.execute(data.get('accountId'), data.get('price_id'),data.get('product_id'))
+        usecase.execute(data.get('account_id'), data.get('price_id'),data.get('product_id'))
         
         return "Doc has been inserted"
     

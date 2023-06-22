@@ -30,7 +30,7 @@ class Create_subscription_use_case():
             subscription = self.config.get('stripeSubscription').store(customer['customerId'], price_id,product_id)
             sub_id = subscription.get('id')
             print('SUBSCRIPTION_ID', sub_id)
-            self.config.get('mongoSubscription').store(customer_id, product_id, sub_id, 'pending')
+            self.config.get('mongoSubscription').store(customer['customerId'], product_id, sub_id, 'pending')
             
         else:
             raise ValueError("No customer found for account id: '{account_id}'.")

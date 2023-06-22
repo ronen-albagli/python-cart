@@ -7,6 +7,7 @@ class ProductMongoGateway(ProductMongoPort):
     def store(self, product_data):
         self.mongoProductCollection.insert_one(product_data);
 
-        
+    def get_by_id(self, id):
+        return self.mongoProductCollection.find_one({'productId': id})
     
     

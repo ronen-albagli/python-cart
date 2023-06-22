@@ -4,3 +4,7 @@ class ProductMongoPort:
         """Store mongo data implementation come here"""
         pass
     
+    def get_by_id(self, id):
+        """"""
+        pass
+    

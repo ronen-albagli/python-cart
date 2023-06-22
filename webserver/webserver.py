@@ -9,4 +9,4 @@ def start_webserver():
 
     register_routes(app)
 
-    app.run(host="localhost", port=8004, debug=False)
+    app.run(host="0.0.0.0", port=8004, debug=False)
