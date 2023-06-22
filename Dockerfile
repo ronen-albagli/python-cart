@@ -12,6 +12,11 @@ COPY requirements.txt .
 # Install the project dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
+RUN python -m venv venv
+
+RUN source venv/bin/activate || echo "Virtual environment activation failed"
+
+
 # Copy the entire application code to the container
 COPY . .
 
