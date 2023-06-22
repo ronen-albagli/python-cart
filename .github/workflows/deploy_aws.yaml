@@ -18,7 +18,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: <AWS_REGION>
+          aws-region: us-east-1
 
       - name: Install dependencies
         run: |
@@ -28,6 +28,7 @@ jobs:
 
       - name: Deploy application to EC2
         run: |
+          echo "ENV_VARIABLE=${{ secrets.ENV_VARIABLE }}" >> .env
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ssh_key.pem
           chmod 400 ssh_key.pem
           ssh -o "StrictHostKeyChecking=no" -i <PATH_TO_PRIVATE_KEY> ec2-user@ec2-3-84-95-162.compute-1.amazonaws.com "cd /path/to/application && git pull origin main && source venv/bin/activate && pip install -r requirements.txt && python manage.py migrate && sudo systemctl restart <SERVICE_NAME>"
