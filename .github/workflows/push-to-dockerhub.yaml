@@ -20,6 +20,6 @@ jobs:
         uses: aevea/action-kaniko@master
         with:
           image: aevea/kaniko
-          tags: ronenlabagli/python-billing:latest
+          tagֿ: ronenlabagli/python-billing:latest
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
