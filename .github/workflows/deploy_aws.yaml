@@ -22,8 +22,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python3 -m venv venv
-          source venv/bin/activate
+          python -m venv venv
+          source venv/bin/activate || echo "Virtual environment activation failed"
           pip install -r requirements.txt
 
       - name: Deploy application to EC2
