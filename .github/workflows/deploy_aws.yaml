@@ -1,4 +1,4 @@
-name: Deploy to AWS
+name: Deploy to EC2
 
 on:
   push:
@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Configure AWS credentials
@@ -18,19 +18,16 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: YOUR_AWS_REGION  # Replace with your AWS region
-
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'  # Replace with your desired Python version
+          aws-region: <AWS_REGION>
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt  # Replace with your requirements file name
+          python -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
 
-      - name: Deploy to AWS Elastic Beanstalk
+      - name: Deploy application to EC2
         run: |
-          eb deploy YOUR_EB_ENVIRONMENT_NAME --staged  # Replace with your EB environment name
-
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ssh_key.pem
+          chmod 400 ssh_key.pem
+          ssh -o "StrictHostKeyChecking=no" -i <PATH_TO_PRIVATE_KEY> ec2-user@ec2-3-84-95-162.compute-1.amazonaws.com "cd /path/to/application && git pull origin main && source venv/bin/activate && pip install -r requirements.txt && python manage.py migrate && sudo systemctl restart <SERVICE_NAME>"
