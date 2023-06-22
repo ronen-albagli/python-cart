@@ -2,9 +2,12 @@ import os
 from pymongo import MongoClient
 from dotenv import load_dotenv
 from adapter.mongo_subscription_adapter import SubscriptionMongoGateway
+from adapter.stripe_subscription_adapter import SubscriptionStripeGateway
 from adapter.mongo_customer_adapter import CustomerMongoGateway
+from adapter.mongo_product_adapter import ProductMongoGateway
 from adapter.stripe_customer_adapter import CustomerStripGateway
 from adapter.aws_localstack_adapter import AWSS3LocalStackGateway
+from adapter.stripe_product_adapter import ProductStripGateway
 import stripe
 
 
@@ -18,6 +21,10 @@ class Config():
     def getMongoClient(self): 
          return MongoClient(self.get_by_path('MONGO_HOST'), int(self.get_by_path('MONGO_PORT')))
     
+    def getStripe(self):
+         stripe.api_key = self.get_by_path('STRIPE_SECRET_KEY');
+         
+         return stripe
 
     def getMongoSubscriptionGateway(self):
         client = self.getMongoClient()
@@ -33,11 +40,50 @@ class Config():
         
         return CustomerMongoGateway(customer_collection)
     
-    def getStripeCustomerGateway(self):
-        stripe.api_key = self.get_by_path('STRIPE_SECRET_KEY');
+    def getMongoCustomerGateway(self):
+        client = self.getMongoClient()
         
-        return CustomerStripGateway(stripe.Customer)
+        customers_collection = client.get_database('billing').get_collection('customers')
+        
+        return CustomerMongoGateway(customers_collection)
     
+    def getMongoCatalogGateway(self):
+        client = self.getMongoClient()
+        
+        catalog_collection = client.get_database('billing').get_collection('catalog')
+        
+        return CustomerMongoGateway(catalog_collection)
+    
+    def getMongoPlanGateway(self):
+        client = self.getMongoClient()
+        
+        plans_collection = client.get_database('billing').get_collection('plans')
+        
+        return CustomerMongoGateway(plans_collection)
+    
+    def getMongoProductGateway(self):
+        client = self.getMongoClient()
+        
+        product_collection = client.get_database('billing').get_collection('products')
+        
+        return ProductMongoGateway(product_collection)
+    
+    def getStripeCustomerGateway(self):
+        stripe = self.getStripe()
+        
+        return CustomerStripGateway(stripe.Customer, stripe.PaymentMethod)
+
+    def getStripeProductGateway(self):
+        stripe = self.getStripe()
+        
+        return ProductStripGateway(stripe.Product, stripe.Price)
+    
+    def getStripeSubscriptionGateway(self):
+        stripe = self.getStripe()
+        
+        return SubscriptionStripeGateway(stripe.Subscription)
+    
+        
     def getAwsS3LocalGateway(self):
         return AWSS3LocalStackGateway()
 
