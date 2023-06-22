@@ -38,4 +38,4 @@ jobs:
         run: docker build -t python-billing .   
 
       - name: Run Docker container
-        run:  docker run python-billing  
+        run:  docker run -d python-billing  
