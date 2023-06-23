@@ -33,7 +33,7 @@ jobs:
 
       - name: Run Docker container
         run: |
-          sudo docker run -d -p 80:80 --name python-billing \ -v /python-cart/.env:/app/.env \ ronenlabagli/python-billing:main 
+          sudo docker run -d -p 80:80 --name python-billing ronenlabagli/python-billing:main 
 
       - name: Deploy application to EC2
         run: |
