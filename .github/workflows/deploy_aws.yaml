@@ -23,7 +23,7 @@ jobs:
           aws-region: us-east-1
 
       - name: Set correct permissions for private key
-          run: chmod 400 ssh_key.pem
+        run: chmod 400 ssh_key.pem
 
       - name: Install Docker
         run: |
