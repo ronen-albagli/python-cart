@@ -11,6 +11,10 @@ def register_customer_routes(app: Flask, router_blueprint):
     def insertCustomer():
         config = get_config();
         
+        stripeApi = config.get_by_path('STRIPE_SECRET_KEY');
+        
+        print('#####STRIPE API ', stripeApi)
+        
         stripeGateway = config.getStripeCustomerGateway()
         mongoCustomerGateway = config.getMongoCustomerGateway()
         # awsGateway = config.getAwsS3LocalGateway()
