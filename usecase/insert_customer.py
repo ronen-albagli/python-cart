@@ -20,6 +20,7 @@ class Create_customer_use_case():
     
     
     def execute(self, customerData):
+        print('INNNNN')
         newCustomer =  self.config['stripeCustomer'].store()
         cust_id = newCustomer.get('id');
         accountId = customerData.get('accountId')
