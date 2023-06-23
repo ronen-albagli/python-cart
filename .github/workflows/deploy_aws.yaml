@@ -31,10 +31,6 @@ jobs:
         run: |
           sudo docker pull --no-cache ronenlabagli/python-billing:main
 
-      - name: Run Docker container
-        run: |
-          sudo docker run -d -p 80:80 --name python-billing ronenlabagli/python-billing:main 
-
       - name: Deploy application to EC2
         run: |
           echo "ENV_VARIABLE='${{ secrets.ENV_VARIABLE }}'" >> .env
