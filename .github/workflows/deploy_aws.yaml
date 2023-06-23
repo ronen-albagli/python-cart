@@ -29,7 +29,7 @@ jobs:
 
       - name: Pull Docker image
         run: |
-          sudo docker pull ronenlabagli/python-billing:main
+          sudo docker pull --no-cache ronenlabagli/python-billing:main
 
       - name: Run Docker container
         run: |
