@@ -52,7 +52,6 @@ def register_product_routes(app: Flask, router_blueprint):
                 
         output = usecase.execute(data)
         
-        print('*******', output);
-        
-        return "New Customer has been inserted"
+                
+        return jsonify(output), 201
         

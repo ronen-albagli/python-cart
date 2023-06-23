@@ -12,19 +12,23 @@ def register_payment_routes(app: Flask, router_blueprint):
         stripeGateway = config.getPaymentIntentGateway()
         mongoCustomerGateway = config.getMongoCustomerGateway()
         productGateway = config.getMongoProductGateway()
-        # awsGateway = config.getAwsS3LocalGateway()
+        stripeCustomerGateway = config.getStripeCustomerGateway()
+        stripeInvoiceGateway = config.getInvoiceStripeGateway()
+        mongoInvoiceGateway = config.getInvoiceMongoGateway()
         
         data = request.json
         
         usecase = Create_payment_intent_use_case({
                'stripePayment': stripeGateway,
                'mongoCustomer': mongoCustomerGateway,
-                'mongoProduct': productGateway
+                'mongoProduct': productGateway,
+                'stripeCustomer': stripeCustomerGateway,
+                'stripeInvoice': stripeInvoiceGateway,
+                'mongoInvoice': mongoInvoiceGateway
             })
         
-        print('mongoCustomerGateway',mongoCustomerGateway)
-        
-        output = usecase.execute(data['account_id'], data['product_id'])
+        output =   usecase.execute(data['account_id'], data['product_id'], data['inovice_id'])
+
         
         return "New Customer has been inserted"
         
@@ -35,15 +39,17 @@ def register_payment_routes(app: Flask, router_blueprint):
         
         stripeGateway = config.getPaymentIntentGateway()
         mongoCustomerGateway = config.getMongoCustomerGateway()
+        stripeCustomerGateway = config.getStripeCustomerGateway()
+        
         
         
         usecase = Complete_payment_intent_use_case({
                'stripePayment': stripeGateway,
                'mongoCustomer': mongoCustomerGateway,
-               
+               'stripeCustomer': stripeCustomerGateway
         })
         
-        usecase.execute(data['account_id'],data['payment_id'])
+        usecase.execute(data['account_id'], data['product_id'], data['invoice_id'])
         
         return "payment completed"
         

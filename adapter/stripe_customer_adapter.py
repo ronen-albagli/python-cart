@@ -10,16 +10,23 @@ class CustomerStripGateway(CustomerStripePort):
         
         return customer
     
-    def modifyStripCustomer(self, id, customerEmail):         
+    def retrieve(self, customer_id):
+        return self.stripCustomer.retrieve(customer_id)
+    
+    def modifyStripCustomer(self, id, customerEmail, accountId):         
         self.stripCustomer.modify(
             id,
-            email = customerEmail
+            email = customerEmail,
+            metadata= {
+                'accountId':accountId
+            }
         )
         
     def appendMetadata(self, customer_id, data):  
         customer =  self.stripCustomer.retrieve(customer_id)       
         customer.metadata['firstName'] = data.get('firstName')
         customer.metadata['lastName'] = data.get('lastName')
+        customer.metadata['accountId'] = data.get('accountId')
         
         customer.save();
         
@@ -28,8 +35,6 @@ class CustomerStripGateway(CustomerStripePort):
             card_token,
             customer=customer_id
         )
-        
-        print('PAYMENT', payment_method)
         
         return self.stripCustomer.modify(
             customer_id,

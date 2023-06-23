@@ -9,6 +9,10 @@ from adapter.stripe_customer_adapter import CustomerStripGateway
 from adapter.aws_localstack_adapter import AWSS3LocalStackGateway
 from adapter.stripe_product_adapter import ProductStripGateway
 from adapter.stripe_payment_adapter import PaymentsStripeGateway
+from adapter.stripe_invoice_adapter import InvoiceStripeGateway
+from adapter.mongo_invoice_adapter import InvoiceMongoGateway
+
+
 import stripe
 
 
@@ -20,11 +24,9 @@ class Config():
         return os.getenv(path)
     
     def getMongoClient(self): 
-        #  return MongoClient(self.get_by_path('MONGO_HOST'), int(self.get_by_path('MONGO_PORT')))
         return MongoClient(self.get_by_path('MONGO_CON_STR'))
     
     def getStripe(self):
-         print("self.get_by_path('STRIPE_SECRET_KEY');", self.get_by_path('STRIPE_SECRET_KEY'))
          stripe.api_key = self.get_by_path('STRIPE_SECRET_KEY');
          
          return stripe
@@ -95,6 +97,17 @@ class Config():
         stripe = self.getStripe()
         
         return PaymentsStripeGateway(stripe.PaymentIntent)
+    
+    def getInvoiceMongoGateway(self):
+        client = self.getMongoClient()
+        invoice_collection = client.get_database('billing').get_collection('invoice')
+        
+        return InvoiceMongoGateway(invoice_collection)
+        
+    def getInvoiceStripeGateway(self):
+        stripe = self.getStripe()
+        
+        return InvoiceStripeGateway(stripe.Invoice,stripe.InvoiceItem)
         
     def getAwsS3LocalGateway(self):
         return AWSS3LocalStackGateway()

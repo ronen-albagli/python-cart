@@ -25,11 +25,10 @@ class Create_subscription_use_case():
     
     def execute(self, account_id, price_id, product_id):
         customer = self.config['mongoCustomer'].findByAccountId(account_id)
-        print("CUSTOMER", customer)
         if customer:
             subscription = self.config.get('stripeSubscription').store(customer['customerId'], price_id,product_id)
             sub_id = subscription.get('id')
-            print('SUBSCRIPTION_ID', sub_id)
+
             self.config.get('mongoSubscription').store(customer['customerId'], product_id, sub_id, 'pending')
             
         else:

@@ -4,22 +4,24 @@ class PaymentsStripeGateway(PaymentStripePort):
     def __init__(self, stripePayments):
         self.stripePayments = stripePayments
         
-    def storeIntent(self, customer_id, price_id, product_id, price):
-        return self.stripePayments.create(
+    def storeIntent(self, customer_id,invoice_id, product_id, price, default_payment_method_id):
+        invoice=invoice_id
+        
+        paymentIntent =  self.stripePayments.create(
             amount=price,
             currency='usd',
             payment_method_types=['card'],
             customer=customer_id,
-            metadata={
-                'product_id': product_id
-                }   
-        )
-        
-        
-    def complete_payment(self, customer,payment_intent_id):
-        return  self.stripePayments.confirm(
-                    payment_intent_id,
-                    # customer,
-                    payment_method='pm_1NLqUOIJTenxdmPoEgU2Kjqh'
-                )
+          )
+
+        return paymentIntent
     
+        
+        
+    def complete_payment(self, payment_intent_id,payment_method):
+
+        intent = self.stripePayments.retrieve(payment_intent_id)
+        
+        intent.confirm(
+               payment_method=payment_method
+        )

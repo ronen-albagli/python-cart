@@ -33,7 +33,6 @@ def register_stripe_routes(app: Flask, router_blueprint):
             # Handle the event and perform desired actions based on event data
             if event["type"] == "payment_intent.succeeded":
                 payment_intent = event["data"]["object"]
-                print('TEST WEBHOOK', payment_intent, event, event['data']);
                 # Perform actions for a successful payment
 
             return "", 200

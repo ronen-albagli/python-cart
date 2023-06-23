@@ -20,11 +20,11 @@ class Update_customer_payment():
     
     def execute(self, paymentData):
         customer = self.config['mongoCustomer'].findByAccountId(paymentData['account_id'])
-        print('customercustomer', customer)
+
         if customer:
             cust_id = customer.get('customerId')
             card_token = paymentData.get('card_token');
-            print('ZAZI',cust_id,card_token)
+
             self.config.get('stripeCustomer').update_customer_card_info(cust_id,card_token)
         else:
             raise ValueError("No customer found for account id: '{account_id}'.")

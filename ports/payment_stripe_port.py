@@ -4,7 +4,7 @@ class PaymentStripePort:
         """Store mongo data implementation come here"""
         pass
     
-    def complete_payment(self, payment_id):
+    def complete_payment(self, payment_id, payment_method):
         """"""
         pass
     

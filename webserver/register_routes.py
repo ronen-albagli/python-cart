@@ -5,6 +5,8 @@ from webserver.routes.subscription.subscription_routes import register_subscript
 from webserver.routes.product.product_routes import register_product_routes
 from  webserver.routes.stripe_webhook.stripe_routes import register_stripe_routes
 from webserver.routes.payments.payments_routes import register_payment_routes
+from webserver.routes.invoice.invoice_routes import register_invoice_routes
+
 from app_config.config import get_config
 
 def register_routes(app: Flask):
@@ -16,6 +18,7 @@ def register_routes(app: Flask):
     register_subscription_routes(app, router_blueprint)
     register_stripe_routes(app, router_blueprint)
     register_payment_routes(app, router_blueprint)
+    register_invoice_routes(app, router_blueprint)
     
     
     # Register the blueprint with the Flask application

@@ -29,11 +29,9 @@ class ProductStripGateway(CustomerStripePort):
             product=product.id,
             unit_amount=price['amount'],
             currency=price['currency'],
-            recurring=price.get('recurring', None),
             metadata=price.get('metadata', None)
         )
         
-        print('priceCreated',priceCreated)
 
         result = {
             'productId': priceCreated.product,
