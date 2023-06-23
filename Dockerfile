@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Copy the requirements file to the working directory
 COPY requirements.txt .
-COPY .env .
+# COPY .env .
 
 
 # Install the project dependencies
