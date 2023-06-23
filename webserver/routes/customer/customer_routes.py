@@ -3,8 +3,11 @@ from flask import Blueprint, request, jsonify
 from usecase.insert_subscription import Create_subscription_use_case
 from usecase.insert_customer import Create_customer_use_case
 from usecase.update_customer_payment import Update_customer_payment
+import logging
 
 from app_config.config import get_config
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s [%(levelname)s] %(message)s', filename='app.log')
+
 
 def register_customer_routes(app: Flask, router_blueprint):
     @router_blueprint.route('/customer/create', methods=['POST'])
@@ -13,7 +16,7 @@ def register_customer_routes(app: Flask, router_blueprint):
         
         stripeApi = config.get_by_path('STRIPE_SECRET_KEY');
         
-        print('#####STRIPE API ', stripeApi)
+        logging.info('#####STRIPE API ', stripeApi)
         
         stripeGateway = config.getStripeCustomerGateway()
         mongoCustomerGateway = config.getMongoCustomerGateway()
