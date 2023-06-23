@@ -36,6 +36,7 @@ jobs:
           echo "ENV_VARIABLE='${{ secrets.ENV_VARIABLE }}'" > .env
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ssh_key.pem
           chmod 400 ssh_key.pem
+          scp -i ssh_key.pem -o StrictHostKeyChecking=no .env ec2-user@ec2-3-84-95-162.compute-1.amazonaws.com:/python-cart/.env
           ssh -o "StrictHostKeyChecking=no" -i  ssh_key.pem ec2-user@ec2-3-84-95-162.compute-1.amazonaws.com "  echo "ENV_VARIABLE='${{ secrets.ENV_VARIABLE }}'" > .env && sudo docker stop python-billing && sudo docker rm python-billing && sudo docker run -d -p 8004:8004  --name python-billing --pull always ronenlabagli/python-billing:main"
 
       # - name: Deploy application to EC2
