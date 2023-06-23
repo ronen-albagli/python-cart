@@ -24,6 +24,7 @@ class Config():
         return MongoClient(self.get_by_path('MONGO_CON_STR'))
     
     def getStripe(self):
+         print("self.get_by_path('STRIPE_SECRET_KEY');", self.get_by_path('STRIPE_SECRET_KEY');)
          stripe.api_key = self.get_by_path('STRIPE_SECRET_KEY');
          
          return stripe
