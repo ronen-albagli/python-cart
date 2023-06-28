@@ -15,6 +15,7 @@ def register_payment_routes(app: Flask, router_blueprint):
         stripeCustomerGateway = config.getStripeCustomerGateway()
         stripeInvoiceGateway = config.getInvoiceStripeGateway()
         mongoInvoiceGateway = config.getInvoiceMongoGateway()
+        sqsGateway = config.getAwsSQSGateway()
         
         data = request.json
         
@@ -24,7 +25,8 @@ def register_payment_routes(app: Flask, router_blueprint):
                 'mongoProduct': productGateway,
                 'stripeCustomer': stripeCustomerGateway,
                 'stripeInvoice': stripeInvoiceGateway,
-                'mongoInvoice': mongoInvoiceGateway
+                'mongoInvoice': mongoInvoiceGateway,
+                'sqs': sqsGateway
             })
         
         output =   usecase.execute(data['account_id'], data['product_id'], data['inovice_id'])
@@ -42,11 +44,10 @@ def register_payment_routes(app: Flask, router_blueprint):
         stripeCustomerGateway = config.getStripeCustomerGateway()
         
         
-        
         usecase = Complete_payment_intent_use_case({
                'stripePayment': stripeGateway,
                'mongoCustomer': mongoCustomerGateway,
-               'stripeCustomer': stripeCustomerGateway
+               'stripeCustomer': stripeCustomerGateway,
         })
         
         usecase.execute(data['account_id'], data['product_id'], data['invoice_id'])

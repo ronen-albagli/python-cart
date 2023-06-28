@@ -8,16 +8,12 @@
             "name": "Python: Flask",
             "type": "python",
             "request": "launch",
-            "module": "flask",
+            "module": "poetry",
             "env": {
                 "FLASK_APP": "app.py",
                 "FLASK_DEBUG": "1"
             },
-            "args": [
-                "run",
-                "--no-debugger",
-                "--no-reload"
-            ],
+            "args": ["run", "python", "app.py"],
             "jinja": true,
             "justMyCode": true
         },

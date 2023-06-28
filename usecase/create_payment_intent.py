@@ -6,6 +6,9 @@ from ports.customer_mongo_port import CustomerMongoPort
 from ports.customer_stripe_port import CustomerStripePort
 from ports.invoice_stripe_port   import InvoiceStripePort
 from ports.invoice_mongo_port   import InvoicePort
+from ports.aws_sqs_port import AWSSQSPort
+
+import json
 
 from usecase.base import BaseUseCase
 
@@ -19,6 +22,7 @@ CustomerMongoPort = TypeVar('CustomerMongoPort', bound=CustomerMongoPort)
 CustomerStripePort = TypeVar('CustomerStripePort', bound=CustomerStripePort)
 InvoiceStripePort = TypeVar('InvoiceStripePort', bound=InvoiceStripePort)
 InvoicePort = TypeVar('InvoicePort', bound=InvoicePort)
+AWSSQSPort = TypeVar('AWSSQSPort', bound=AWSSQSPort)
 
 
 
@@ -30,6 +34,7 @@ class UseCaseConfig(TypedDict):
     stripeCustomer: Type[CustomerStripePort]
     stripeInvoice: Type[InvoiceStripePort]
     mongoInvoice: Type[InvoicePort]
+    sqs: Type[AWSSQSPort]
     
     
     
@@ -39,6 +44,7 @@ class Create_payment_intent_use_case(BaseUseCase):
         self.config = usecaseConfig
         
     def execute(self, account_id, product_id, invoice_id):
+        queue_url = self.config['sqs'].create_queue('invoice_completed');
         customer = self.config['mongoCustomer'].findByAccountId(account_id)
         product = self.config['mongoProduct'].get_by_id(product_id)
         
@@ -58,7 +64,15 @@ class Create_payment_intent_use_case(BaseUseCase):
             
             self.config['mongoInvoice'].update_invoice_status(invoice_id,'fulfilled')
             
-            return paymentId            
+            data = {
+                'invoiceId': invoice_id,
+                'accountId': account_id,
+                'quota': product.get('quota')
+            }
+            print('queue_url',queue_url)
+            sqsResponse = self.config['sqs'].publish(queue_url, json.dumps(data), account_id)
+            print('sqsResponse', sqsResponse)
+            # return paymentId            
         else:
             raise ValueError("No customer found for account id: '{account_id}'.")
 

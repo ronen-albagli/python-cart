@@ -7,11 +7,12 @@ from adapter.mongo_customer_adapter import CustomerMongoGateway
 from adapter.mongo_product_adapter import ProductMongoGateway
 from adapter.stripe_customer_adapter import CustomerStripGateway
 from adapter.aws_localstack_adapter import AWSS3LocalStackGateway
+from adapter.aws_sqs_adapter import AWSQS3Gateway
 from adapter.stripe_product_adapter import ProductStripGateway
 from adapter.stripe_payment_adapter import PaymentsStripeGateway
 from adapter.stripe_invoice_adapter import InvoiceStripeGateway
 from adapter.mongo_invoice_adapter import InvoiceMongoGateway
-
+import boto3
 
 import stripe
 
@@ -111,6 +112,15 @@ class Config():
         
     def getAwsS3LocalGateway(self):
         return AWSS3LocalStackGateway()
+    
+    def getAwsSQSGateway(self):
+        return AWSQS3Gateway(boto3.client(
+            'sqs',
+            # endpoint_url=aws_host,  # LocalStack S3 endpoint
+            aws_access_key_id=self.get_by_path('AWS_ACCESS_KEY'),   # Replace with your AWS Access Key ID
+            aws_secret_access_key=self.get_by_path('AWS_SECRET_KEY'),  # Replace with your AWS Secret Access Key
+            region_name='us-east-1'  # Replace with your desired AWS region
+        ))
 
 
 appConfig = Config()
